@@ -33,7 +33,7 @@ export default function ShopScreen({ navigation }: any) {
 
 const st = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
-  chips: { flexDirection: 'row', gap: 8, paddingHorizontal: 20, paddingVertical: 8, flexWrap: 'wrap' },
+  chips: { flexDirection: 'row', gap: 8, paddingHorizontal: 20, paddingVertical: 8, flexWrap: 'wrap', maxWidth: 720, width: '100%', alignSelf: 'center' },
   chip: { backgroundColor: colors.card, borderRadius: radius.pill, paddingVertical: 8, paddingHorizontal: 16, borderWidth: 1, borderColor: colors.line },
   chipOn: { backgroundColor: colors.sage, borderColor: colors.sage },
   chipText: { fontFamily: fonts.bold, color: colors.deep, fontSize: 13 },

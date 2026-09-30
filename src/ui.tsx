@@ -81,7 +81,7 @@ export const s = StyleSheet.create({
   btn: { backgroundColor: colors.deep, borderRadius: radius.pill, paddingVertical: 14, paddingHorizontal: 22, alignItems: 'center' },
   btnSoft: { backgroundColor: colors.sageLight },
   btnText: { fontFamily: fonts.bold, color: '#fff', fontSize: 15 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 12, paddingBottom: 8 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 12, paddingBottom: 8, maxWidth: 720, width: '100%', alignSelf: 'center' },
   logo: { fontFamily: fonts.title, fontSize: 28, color: colors.deep },
   bag: { width: 42, height: 42, borderRadius: 21, backgroundColor: colors.sageLight, alignItems: 'center', justifyContent: 'center' },
   badge: { position: 'absolute', top: -2, right: -2, minWidth: 18, height: 18, borderRadius: 9, backgroundColor: colors.clay, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 },

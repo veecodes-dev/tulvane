@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Platform, View } from 'react-native';
+import { ActivityIndicator, Platform, useWindowDimensions, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DefaultTheme, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -33,10 +33,15 @@ const icons: Record<string, [keyof typeof Ionicons.glyphMap, keyof typeof Ionico
 };
 
 function Tabs() {
+  // On a wide screen (website on a computer) the menu goes to the top. On a phone it stays at the bottom.
+  const { width } = useWindowDimensions();
+  const wide = Platform.OS === 'web' && width >= 768;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+        tabBarPosition: wide ? 'top' : 'bottom',
+        tabBarLabelPosition: wide ? 'beside-icon' : 'below-icon',
         tabBarActiveTintColor: colors.deep,
         tabBarInactiveTintColor: colors.muted,
         tabBarLabelStyle: { fontFamily: fonts.bold, fontSize: 11 },
