@@ -1,0 +1,25 @@
+{
+  "delivery": { "fee": 4.9, "freeFrom": 50 },
+  "sizes": [
+    { "label": "Small", "extra": 0 },
+    { "label": "Medium", "extra": 8 },
+    { "label": "Large", "extra": 16 }
+  ],
+  "products": [
+    { "id": "peach-dried", "name": "Peach Dried Bouquet", "category": "Soft", "price": 36, "short": "Dried roses in peach paper", "description": "Dried roses, grasses and small white flowers in soft peach paper. It never wilts, so it is a gift that stays for months." },
+    { "id": "blush-rose", "name": "Blush Rose & Eucalyptus", "category": "Soft", "price": 44, "short": "Cream roses with green leaves", "description": "Cream and pink roses with eucalyptus and baby's breath, tied with a silk ribbon. Lasts about 7 days in water." },
+    { "id": "lilac-carnation", "name": "Lilac Carnation Wrap", "category": "Soft", "price": 39, "short": "Peach carnations and lilac", "description": "Peach carnations, purple chrysanthemums and lilac sprigs in a grey and cream wrap. Gentle and cheerful." },
+    { "id": "sunset-tulips", "name": "Sunset Tulip Bunch", "category": "Bold", "price": 28, "short": "Orange tulips in kraft paper", "description": "A big bunch of orange and red tulips in brown kraft paper. Fresh from the market, best in spring." },
+    { "id": "coral-mums", "name": "Coral Chrysanthemum Bunch", "category": "Bold", "price": 24, "short": "Bright coral flowers, simple wrap", "description": "Bright coral chrysanthemums in white paper. Simple, happy and good value. They last up to 10 days." },
+    { "id": "wild-autumn", "name": "Wild Autumn Bouquet", "category": "Bold", "price": 58, "short": "Pampas grass, roses and orchid", "description": "A rich, wild bouquet with pampas grass, dusty roses, orange blooms and a deep pink orchid. Made to order." }
+  ],
+  "occasions": [
+    { "id": "birthday", "label": "Birthday", "tip": "Happy, bright colors work best. Choose tulips for a fun gift, or roses for someone special.", "products": ["sunset-tulips", "blush-rose", "lilac-carnation"] },
+    { "id": "anniversary", "label": "Anniversary", "tip": "Roses say love. Pick soft colors for calm and romantic, or a rich wild bouquet for a big moment.", "products": ["blush-rose", "wild-autumn"] },
+    { "id": "thank-you", "label": "Thank you", "tip": "Keep it simple and warm. A dried bouquet stays for months, so they remember your thanks.", "products": ["peach-dried", "coral-mums", "lilac-carnation"] },
+    { "id": "get-well", "label": "Get well", "tip": "Choose cheerful colors and flowers with a light smell. Small bouquets are easy to fit in a hospital room.", "products": ["coral-mums", "lilac-carnation"] },
+    { "id": "congrats", "label": "Congratulations", "tip": "Go bold. Bright colors show you are proud and happy for them.", "products": ["sunset-tulips", "coral-mums", "wild-autumn"] },
+    { "id": "sorry", "label": "Sorry", "tip": "Soft, calm colors feel gentle. Add a short, honest message on the card.", "products": ["peach-dried", "lilac-carnation"] },
+    { "id": "new-home", "label": "New home", "tip": "Dried flowers are perfect. They need no water and look good for months.", "products": ["peach-dried", "wild-autumn"] }
+  ]
+}

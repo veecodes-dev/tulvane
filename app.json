@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Tulvane",
+    "slug": "tulvane",
+    "description": "Demo flower shop app: shop, Stripe test payments, and an AI helper.",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#f4f1ea",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#2f4a3c",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "name": "Tulvane",
+      "shortName": "Tulvane",
+      "description": "Demo flower shop: choose a bouquet, pay in test mode, ask the AI helper.",
+      "themeColor": "#7a9a86",
+      "backgroundColor": "#f4f1ea"
+    },
+    "plugins": [
+      "expo-web-browser",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#f4f1ea"
+        }
+      ]
+    ]
+  }
+}

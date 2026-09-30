@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tulvane Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ea;--card:#fff;--sage:#7a9a86;--light:#dfe8e0;--deep:#2f4a3c;--clay:#c9876b;--line:#d9dfd6;--muted:#6b7d72}
+@media (prefers-color-scheme:dark){:root{--bg:#1d2a23;--card:#26362d;--light:#33463b;--deep:#e9efe9;--line:#3b4f43;--muted:#9db0a4}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--deep);font-family:'DM Sans',system-ui,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;max-width:900px;margin:0 auto}
+h1{font-family:'Fraunces',serif;font-size:26px;margin:0}
+main{max-width:900px;margin:0 auto;padding:0 20px 40px}
+.login{max-width:360px;margin:80px auto;padding:0 20px;display:grid;gap:12px}
+input,select,button{font:inherit;color:inherit}
+input{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+button{cursor:pointer;border:0;border-radius:999px;padding:11px 20px;font-weight:700;background:var(--deep);color:var(--bg)}
+button.soft{background:var(--light);color:var(--deep)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}
+.chip{background:var(--card);border:1px solid var(--line);color:var(--deep)}.chip.on{background:var(--sage);border-color:var(--sage);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:var(--light);border-radius:18px;padding:14px}.stat b{display:block;font-size:24px;font-family:'Fraunces',serif}.stat span{font-size:13px;color:var(--muted)}
+.order{background:var(--card);border-radius:18px;padding:16px;margin-bottom:10px;display:grid;gap:6px}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.id{font-weight:700;font-size:16px}.muted{color:var(--muted);font-size:13px}.total{color:var(--clay);font-weight:700}
+select{padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg)}
+.pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--light)}
+.err{color:#b4483a;font-weight:700}
+</style></head><body>
+<div id="login" class="login">
+  <h1>Tulvane Admin</h1>
+  <p class="muted">Demo admin for the shop owner. Enter the admin password from the server settings.</p>
+  <input id="pw" type="password" placeholder="Admin password" autocomplete="current-password">
+  <button id="go">Sign in</button>
+  <div id="loginErr" class="err"></div>
+</div>
+<div id="app" hidden>
+  <header><h1>Tulvane Admin</h1><div><button class="soft" id="refresh">Refresh</button> <button class="soft" id="out">Sign out</button></div></header>
+  <main>
+    <div class="stats" id="stats"></div>
+    <div class="chips" id="chips"></div>
+    <div id="list"></div>
+  </main>
+</div>
+<script>
+const STATUSES=['Awaiting payment','Preparing','On the way','Delivered','Cancelled'];
+let pw=sessionStorage.getItem('tv-admin')||'',orders=[],filter='Active',timer;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'€'+Number(n).toFixed(2).replace('.00','');
+const day=d=>d?new Date(d).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}):'-';
+async function api(path,opts={}){const r=await fetch(path,{...opts,headers:{'Content-Type':'application/json','x-admin-password':encodeURIComponent(pw)}});if(r.status===401)throw new Error('Wrong password');if(!r.ok)throw new Error('Server error');return r.json();}
+async function load(){try{orders=(await api('/admin-api/orders')).orders;$('login').hidden=true;$('app').hidden=false;render();}catch(e){$('app').hidden=true;$('login').hidden=false;$('loginErr').textContent=pw?e.message:'';}}
+function render(){
+  const paid=orders.filter(o=>o.status!=='Awaiting payment'&&o.status!=='Cancelled');
+  $('stats').innerHTML=[['Paid orders',paid.length],['To deliver',orders.filter(o=>['Preparing','On the way'].includes(o.status)).length],['Revenue (test)',money(paid.reduce((n,o)=>n+o.total,0))]].map(([l,v])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
+  const filters=['Active','All',...STATUSES];
+  $('chips').innerHTML=filters.map(f=>`<button class="chip ${f===filter?'on':''}" data-f="${f}">${f}</button>`).join('');
+  const shown=orders.filter(o=>filter==='All'||(filter==='Active'?['Preparing','On the way'].includes(o.status):o.status===filter));
+  $('list').innerHTML=shown.length?shown.map(o=>`<div class="order">
+    <div class="top"><span class="id">${esc(o.id)}</span>
+      <select data-id="${esc(o.id)}">${STATUSES.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div>${o.items.map(i=>`${i.qty} × ${esc(i.name)} (${esc(i.size)})`).join('<br>')}</div>
+    <div class="muted">${esc(o.name)} · ${esc(o.address)}</div>
+    <div class="muted">Deliver on ${day(o.deliveryDate)}${o.note?` · Card: “${esc(o.note)}”`:''}</div>
+    <div class="top"><span class="muted">Ordered ${new Date(o.createdAt).toLocaleString('en-GB')}</span><span class="total">${money(o.total)}</span></div>
+  </div>`).join(''):'<p class="muted">No orders here yet.</p>';
+}
+$('chips').onclick=e=>{const f=e.target.dataset.f;if(f){filter=f;render();}};
+$('list').onchange=async e=>{const id=e.target.dataset.id;if(!id)return;try{await api('/admin-api/orders/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:e.target.value})});await load();}catch(err){alert(err.message);}};
+$('go').onclick=()=>{pw=$('pw').value;sessionStorage.setItem('tv-admin',pw);load();};
+$('pw').onkeydown=e=>{if(e.key==='Enter')$('go').click();};
+$('refresh').onclick=load;
+$('out').onclick=()=>{sessionStorage.removeItem('tv-admin');pw='';clearInterval(timer);$('app').hidden=true;$('login').hidden=false;};
+if(pw)load();
+timer=setInterval(()=>{if(!$('app').hidden)load();},20000);
+</script></body></html>

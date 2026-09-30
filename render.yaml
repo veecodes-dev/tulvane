@@ -1,0 +1,25 @@
+# Render "blueprint": tells Render how to build and run the shop (one service: website + server).
+# Secret values are NOT here. You add them in the Render dashboard (Environment).
+services:
+  - type: web
+    name: tulvane
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build:web
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
