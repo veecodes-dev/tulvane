@@ -45,12 +45,8 @@ function Tabs() {
         tabBarActiveTintColor: colors.deep,
         tabBarInactiveTintColor: colors.muted,
         tabBarLabelStyle: { fontFamily: fonts.bold, fontSize: 11 },
-        tabBarStyle: {
-          backgroundColor: colors.card,
-          borderTopColor: colors.line,
-          // On the phone website, keep the menu above the iPhone home bar and Safari toolbar.
-          ...(Platform.OS === 'web' && !wide ? ({ height: 'calc(58px + env(safe-area-inset-bottom, 0px))', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 8px)', paddingTop: 6 } as object) : null),
-        },
+        // The bar adds the bottom safe area (iPhone home bar) by itself, read from the page via viewport-fit=cover.
+        tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.line },
         tabBarIcon: ({ focused, color, size }) => <Ionicons name={icons[route.name][focused ? 0 : 1]} size={size} color={color} />,
       })}
     >
