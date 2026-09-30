@@ -46,5 +46,8 @@ const tags = `
 const indexUrl = new URL('index.html', dist);
 let html = readFileSync(indexUrl, 'utf8');
 if (!html.includes('manifest.webmanifest')) html = html.replace('</head>', `${tags}</head>`);
+// Use the full phone screen (including the area around the notch and home bar) and the real visible height in Safari.
+html = html.replace(/(<meta name="viewport" content="[^"]*?)"/, (m, a) => (a.includes('viewport-fit') ? m : `${a}, viewport-fit=cover"`));
+if (!html.includes('100dvh')) html = html.replace('</head>', '<style>html,body,#root{height:100dvh}</style></head>');
 writeFileSync(indexUrl, html);
 console.log('PWA files added to dist');
