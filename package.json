@@ -40,7 +40,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "server": "node --env-file-if-exists=.env server/index.mjs",
-    "build:web": "expo export --platform web"
+    "build:web": "expo export --platform web && node scripts/pwa.mjs"
   },
   "private": true,
   "engines": {

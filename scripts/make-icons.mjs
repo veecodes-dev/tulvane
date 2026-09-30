@@ -28,5 +28,10 @@ await Promise.all([
   png(svg(null, mark(onLight, 1)), 512, 'assets/splash-icon.png'),
   png(svg(C.deep, mark(onDark, 1.1)), 96, 'assets/favicon.png'),
   png(svg(null, mark(onLight, 1.35)), 256, 'assets/logo-mark.png'),
+  // Icons for installing the website on a phone home screen (PWA). "maskable" has extra space around the mark.
+  png(svg(C.deep, mark(onDark, 1)), 192, 'assets/pwa-192.png'),
+  png(svg(C.deep, mark(onDark, 1)), 512, 'assets/pwa-512.png'),
+  png(svg(C.deep, mark(onDark, 0.8)), 512, 'assets/pwa-maskable-512.png'),
+  png(svg(C.deep, mark(onDark, 1)), 180, 'assets/apple-touch-icon.png'),
 ]);
 console.log('icons ready');
