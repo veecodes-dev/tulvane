@@ -5,8 +5,9 @@
 <style>
 :root{--bg:#f4f1ea;--card:#fff;--sage:#7a9a86;--light:#dfe8e0;--deep:#2f4a3c;--clay:#c9876b;--line:#d9dfd6;--muted:#6b7d72}
 @media (prefers-color-scheme:dark){:root{--bg:#1d2a23;--card:#26362d;--light:#33463b;--deep:#e9efe9;--line:#3b4f43;--muted:#9db0a4}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--deep);font-family:'DM Sans',system-ui,sans-serif}
-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;max-width:900px;margin:0 auto}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg);color:var(--deep);font-family:'DM Sans',system-ui,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:16px 20px;max-width:900px;margin:0 auto}
+.actions{display:flex;gap:10px}
 h1{font-family:'Fraunces',serif;font-size:26px;margin:0}
 main{max-width:900px;margin:0 auto;padding:0 20px 40px}
 .login{max-width:360px;margin:80px auto;padding:0 20px;display:grid;gap:12px}
@@ -33,7 +34,7 @@ select{padding:8px 12px;border-radius:12px;border:1px solid var(--line);backgrou
   <div id="loginErr" class="err"></div>
 </div>
 <div id="app" hidden>
-  <header><h1>Tulvane Admin</h1><div><button class="soft" id="refresh">Refresh</button> <button class="soft" id="out">Sign out</button></div></header>
+  <header><h1>Tulvane Admin</h1><div class="actions"><button class="soft" id="refresh">Refresh</button><button class="soft" id="out">Sign out</button></div></header>
   <main>
     <div class="stats" id="stats"></div>
     <div class="chips" id="chips"></div>
