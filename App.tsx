@@ -1,9 +1,9 @@
 import React from 'react';
-import { ActivityIndicator, Platform, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, Text, useWindowDimensions, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DefaultTheme, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator, BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useFonts, Fraunces_600SemiBold } from '@expo-google-fonts/fraunces';
@@ -32,12 +32,37 @@ const icons: Record<string, [keyof typeof Ionicons.glyphMap, keyof typeof Ionico
   Orders: ['receipt', 'receipt-outline'],
 };
 
+// Our own bottom menu for the phone website. It keeps clear of the iPhone home bar using the CSS safe area,
+// which is more reliable in Safari than the library bar.
+function PhoneTabBar({ state, navigation }: BottomTabBarProps) {
+  const bottom = { paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 14px)' } as object;
+  return (
+    <View style={[{ flexDirection: 'row', backgroundColor: colors.card, borderTopWidth: 1, borderTopColor: colors.line, paddingTop: 8 }, bottom]}>
+      {state.routes.map((route, index) => {
+        const focused = state.index === index;
+        const color = focused ? colors.deep : colors.muted;
+        const onPress = () => {
+          const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+          if (!focused && !event.defaultPrevented) navigation.navigate(route.name, route.params);
+        };
+        return (
+          <Pressable key={route.key} onPress={onPress} accessibilityRole="button" accessibilityLabel={route.name} style={{ flex: 1, alignItems: 'center', gap: 3 }}>
+            <Ionicons name={icons[route.name][focused ? 0 : 1]} size={24} color={color} />
+            <Text style={{ fontFamily: fonts.bold, fontSize: 11, color }}>{route.name}</Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
 function Tabs() {
   // On a wide screen (website on a computer) the menu goes to the top. On a phone it stays at the bottom.
   const { width } = useWindowDimensions();
   const wide = Platform.OS === 'web' && width >= 768;
   return (
     <Tab.Navigator
+      tabBar={Platform.OS === 'web' && !wide ? (props) => <PhoneTabBar {...props} /> : undefined}
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarPosition: wide ? 'top' : 'bottom',
