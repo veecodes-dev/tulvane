@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs';
 import { timingSafeEqual } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
-import { attachSession, createOrder, dbMode, listOrders, markPaid, setStatus, statusesFor } from './db.mjs';
+import { attachSession, createOrder, dbMode, deleteOrder, listOrders, markPaid, setStatus, statusesFor } from './db.mjs';
 
 const catalog = JSON.parse(readFileSync(new URL('../src/catalog.json', import.meta.url), 'utf8'));
 const PORT = process.env.PORT || 8787;
@@ -158,6 +158,9 @@ const adminAuth = (req, res, next) => {
 app.get('/admin', (_req, res) => res.type('html').send(readFileSync(new URL('./admin.html', import.meta.url), 'utf8')));
 app.get('/admin-api/orders', adminAuth, async (_req, res) => res.json({ orders: await listOrders() }));
 app.patch('/admin-api/orders/:id', adminAuth, async (req, res) => ((await setStatus(req.params.id, req.body?.status)) ? res.json({ ok: true }) : res.status(400).json({ error: 'Bad order or status.' })));
+
+// Deleting an order removes it from our database only (it does not touch Stripe).
+app.delete('/admin-api/orders/:id', adminAuth, async (req, res) => ((await deleteOrder(req.params.id)) ? res.json({ ok: true }) : res.status(404).json({ error: 'Order not found.' })));
 
 // Page that Stripe opens after payment when the app runs on a phone.
 app.get('/paid', (req, res) => {

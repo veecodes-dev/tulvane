@@ -82,6 +82,11 @@ export async function listOrders() {
   return rows.map(toOrder);
 }
 
+export async function deleteOrder(id) {
+  const r = await db.execute({ sql: 'DELETE FROM orders WHERE id = ?', args: [id] });
+  return r.rowsAffected > 0;
+}
+
 export async function setStatus(id, status) {
   if (!STATUSES.includes(status)) return false;
   const r = await db.execute({ sql: 'UPDATE orders SET status = ? WHERE id = ?', args: [status, id] });

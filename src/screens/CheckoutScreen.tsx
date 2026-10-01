@@ -84,6 +84,9 @@ export default function CheckoutScreen({ navigation }: any) {
     <View style={st.root}>
       <ScrollView contentContainerStyle={st.scroll} keyboardShouldPersistTaps="handled">
         <Text style={st.h}>Delivery</Text>
+        <View style={st.test}>
+          <Text style={st.testText}>This is a demo shop. Please do not enter real personal data: use a made-up name and address.</Text>
+        </View>
         <TextInput style={st.input} placeholder="Full name" placeholderTextColor={colors.muted} value={name} onChangeText={setName} />
         <TextInput style={st.input} placeholder="Street, number, city" placeholderTextColor={colors.muted} value={address} onChangeText={setAddress} />
 

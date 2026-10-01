@@ -22,6 +22,7 @@ button.soft{background:var(--light);color:var(--deep)}
 .order{background:var(--card);border-radius:18px;padding:16px;margin-bottom:10px;display:grid;gap:6px}
 .top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
 .id{font-weight:700;font-size:16px}.muted{color:var(--muted);font-size:13px}.total{color:var(--clay);font-weight:700}
+button.del{background:transparent;color:#b4483a;border:1px solid #b4483a;padding:6px 14px;font-size:13px}
 select{padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg)}
 .pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--light)}
 .err{color:#b4483a;font-weight:700}
@@ -63,10 +64,12 @@ function render(){
     <div class="muted">${esc(o.name)} · ${esc(o.address)}</div>
     <div class="muted">Deliver on ${day(o.deliveryDate)}${o.note?` · Card: “${esc(o.note)}”`:''}</div>
     <div class="top"><span class="muted">Ordered ${new Date(o.createdAt).toLocaleString('en-GB')}</span><span class="total">${money(o.total)}</span></div>
+    <div><button class="del" data-del="${esc(o.id)}">Delete order</button></div>
   </div>`).join(''):'<p class="muted">No orders here yet.</p>';
 }
 $('chips').onclick=e=>{const f=e.target.dataset.f;if(f){filter=f;render();}};
 $('list').onchange=async e=>{const id=e.target.dataset.id;if(!id)return;try{await api('/admin-api/orders/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:e.target.value})});await load();}catch(err){alert(err.message);}};
+$('list').onclick=async e=>{const id=e.target.dataset.del;if(!id)return;if(!confirm('Delete order '+id+'? This removes it from the shop database and cannot be undone.'))return;try{await api('/admin-api/orders/'+encodeURIComponent(id),{method:'DELETE'});await load();}catch(err){alert(err.message);}};
 $('go').onclick=()=>{pw=$('pw').value;sessionStorage.setItem('tv-admin',pw);load();};
 $('pw').onkeydown=e=>{if(e.key==='Enter')$('go').click();};
 $('refresh').onclick=load;
